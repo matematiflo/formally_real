@@ -23,6 +23,7 @@ def sum_of_squares_2 {A : Type _} [Semiring A] {n : ℕ} (f : Fin n → A) : A :
 
 example : sum_of_squares [1, 2, 3] = 14 := rfl
 
+
 #eval sum_of_squares ([] : List ℕ)
 
 def sum_of_squares_of_list_div {F : Type _} [Semifield F] (L : List F) (x : F) (h : x ≠ 0) : sum_of_squares (L.map (./x)) = sum_of_squares L / (x^2) := by

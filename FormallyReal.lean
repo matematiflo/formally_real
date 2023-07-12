@@ -20,16 +20,10 @@ class IsFormallyReal (A : Type _) [Semiring A] : Prop where
 
 variable {A F : Type _}
 
-def squares (A : Type _) [Semiring A] : Set A := {a | ∃ (b : A), a = b ^ 2}
-
-def cone_of_squares (A : Type _) [Semiring A] := AddSubmonoid.closure (squares A)
-
-@[reducible]
-def is_sum_of_squares [Semiring A] (S : A) : Prop := S ∈ cone_of_squares A
+def is_sum_of_squares [Semiring A] (S : A) : Prop := ∃ n : ℕ, ∃ f : Fin n → A, ∑ i, (f i)^2 = S 
 
 def sum_sq_add_sum_sq_is_sum_sq [Semiring A] (S1 S2 : A) (h1 : is_sum_of_squares S1) (h2 : is_sum_of_squares S2) : is_sum_of_squares (S1 + S2) := by
-  apply AddSubmonoid.add_mem _ h1 h2
-  done
+  sorry
 
 /- ## Properties of formally real semirings -/
 
@@ -39,8 +33,16 @@ section ppties_of_formally_real_semirings
 
 More generally, if `A` is a formally real nontrivial *semiring* (so `-1` does not make sense in `A`), then we prove that there does *not* exist a sum of squares `S` in `A` such that `1 + S = 0`. -/
 
-def sum_sq_neq_minus_one {A : Type _} [Semiring A] [ntA : Nontrivial A] : IsFormallyReal A → (∀ n : ℕ, ∀ f : Fin n → A, 1 + sum_of_squares f ≠ 0) := by
-  sorry
+def sum_sq_neq_minus_one {A : Type _} [Semiring A] [Nontrivial A] : IsFormallyReal A → (∀ n : ℕ, ∀ f : Fin n → A, 1 + sum_of_squares f ≠ 0) := by
+  intro hA
+  intro n
+  
+
+
+    
+
+
+
 
 /- As an example, we show that ordered semirings are formally real. -/
 
