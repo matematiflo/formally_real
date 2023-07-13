@@ -23,6 +23,9 @@ def sum_of_squares_2 {A : Type _} [Semiring A] {n : ℕ} (f : Fin n → A) : A :
 
 example : sum_of_squares [1, 2, 3] = 14 := rfl
 
+def my_list : List ℤ := [1,-2,3]
+
+#eval my_list[1]
 
 #eval sum_of_squares ([] : List ℕ)
 
