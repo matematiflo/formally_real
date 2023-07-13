@@ -8,9 +8,9 @@ To define formally real semirings, we first define what it means to be a sum of 
 
 def sum_of_squares {R : Type _} [Semiring R] : List R → R
   | [] => 0
-  | (x :: L) => (x ^ 2) + (sum_of_squares L)
+  | (a :: L) => (a ^ 2) + (sum_of_squares L)
 
-def is_sum_of_squares {R : Type _} [Semiring R] (x : R) : Prop := ∃ L : List R, sum_of_squares L = x
+def is_sum_of_squares {R : Type _} [Semiring R] (s : R) : Prop := ∃ L : List R, sum_of_squares L = s
 
 /- A few sanity checks -/
 
@@ -49,12 +49,24 @@ def sum_of_squares_concat {R : Type _} [Semiring R] (L1 L2 : List R) : sum_of_sq
     simp [sum_of_squares]
   done
 
-def sum_of_squares_of_list_div {F : Type _} [Semifield F] (L : List F) (c : F) (h : c ≠ 0) : sum_of_squares (L.map (./c)) = sum_of_squares L / (c^2) := by
-  induction' L with x L ih
+def sum_of_squares_of_list {R : Type _} [Semiring R] (L : List R) : sum_of_squares L = (L.map (.^2)).sum := by
+  induction' L with a L ih
   · simp [sum_of_squares]
-  · sorry
+  · rw[sum_of_squares_head_tail, ih]
+    simp [sum_of_squares]
+  done
 
--- **TASK 1** Complete the proof above
+def sum_of_squares_of_list_div {F : Type _} [Semifield F] (L : List F) (c : F) (h : c ≠ 0) : sum_of_squares (L.map (./c)) = sum_of_squares L / (c^2) := by
+  rw [sum_of_squares_of_list]
+  simp [sum_of_squares]
+  have comp : ((fun x => x ^ 2) ∘ (fun x => x / c)) = (fun x => x ^ 2 * (c ^ 2)⁻¹ ) := by 
+    ext x
+    field_simp
+  rw [comp]
+  rw [sum_of_squares_of_list]
+  rw [div_eq_mul_inv]
+  rw [List.sum_map_mul_right]
+  done
   
 /- ## Definition of formally real semirings -/
 
