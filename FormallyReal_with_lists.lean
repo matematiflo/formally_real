@@ -107,7 +107,7 @@ def one_add_sum_of_squares_neq_zero {R : Type _} [Semiring R] [ntR : Nontrivial 
   apply h3
   exact hL''
   
--- **TASK 4:** Complete the proof above
+-- **TASK 4:** Complete the proof above (one `sorry` to fill)
 
  /- In particular, **a field `F` is formally real if and only if `-1` is not a sum of squares in `F`**. -/
 
@@ -125,4 +125,5 @@ def one_add_sum_of_squares_neq_zero {R : Type _} [Semiring R] [ntR : Nontrivial 
  /- ## Artin-Schreier theory -/
 
  /- We show that formally real fields admit an ordering, not unique in general.
+
  In particular, **a field `F` is formally real if and only if it admits an ordering.** -/
