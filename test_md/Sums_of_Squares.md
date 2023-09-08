@@ -17,10 +17,10 @@ def sum_of_squares {R : Type} [Semiring R] : List R → R
   | [] => 0
   | (a :: L) => (a ^ 2) + (sum_of_squares L)
 
-#eval sum_of_squares [1, -2, 3]
-#eval sum_of_squares ([] : List ℕ)
+#eval sum_of_squares [1, -2, 3] -- 14
+#eval sum_of_squares ([] : List ℕ) -- 0
 
-example : sum_of_squares [1, -2, 3] = 14 := rfl
+example : sum_of_squares [1, -2, 3] = 14 := rfl -- the two terms are definitionally equal
 ```
 
 The sum of squares of the list `L1 ++ L2` is the sum of squares of `L1` plus the sum of squares of `L2`.
