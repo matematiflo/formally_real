@@ -31,9 +31,10 @@ theorem sum_of_squares_concat {R : Type} [Semiring R] (L1 L2 : List R) :
   sum_of_squares (L1 ++ L2) = sum_of_squares L1 + sum_of_squares L2 
   := by
     induction L1 with -- we prove the result by induction on the list L1 (the list type is an inductive type)
-    | nil => simp [sum_of_squares] -- [] ++ L2 = L2 so everything follows by definition of sum_of_squares
-    | cons a L ih => 
-      simp [sum_of_squares] -- sum_of_squares (a :: (L ++ L2)) = a^2 + sum_of_squares (L ++ L2)
+    | nil => -- case when L1 is the empty list
+      simp [sum_of_squares] -- [] ++ L2 = L2 so everything follows by definition of sum_of_squares
+    | cons a L ih => -- case when L1 = (a :: L)
+      simp [sum_of_squares] -- (a :: L) ++ L2 = a :: (L ++ L2) and sum_of_squares (a :: (L ++ L2)) = a^2 + sum_of_squares (L ++ L2)
       rw [ih] -- ih : sum_of_squares (L ++ L2) = sum_of_squares L + sum_of_squares L2
       rw [add_assoc] 
     done
@@ -48,9 +49,10 @@ theorem sum_of_squares_permut {R : Type} [Semiring R] (L1 L2 : List R) :
   := by
     intro H
     induction H -- we prove the result by induction on ~ (the permutation type is an inductive type)
-    · case nil => rfl -- case when L1 L2 are both empty
+    · case nil => -- case when L1 L2 are both empty
+      rfl -- equality holds by definition
     · case cons x l1 l2 Hl Sum12 => -- case when L1 = (x :: l1) and L2 = (x :: l2) with l1 ~ l2
-      simp [sum_of_squares] -- by definition, sum_of_squares (x :: lj) = x^2 + sum_of_squares lj
+      simp [sum_of_squares] -- by definition, sum_of_squares (x :: lj) = x^2 + sum_of_squares lj for j = 1, 2
       rw [Sum12] -- by induction, sum_of_squares l1 = sum_of_squares l2
     · case swap x y L => -- case when L1 = (y :: (x :: L)) and L2 = (x :: (y :: L))
       simp [sum_of_squares] -- by definition, sum_of_squares (y :: (x :: L)) = y^2 + (x^2 + sum_of_squares L)
