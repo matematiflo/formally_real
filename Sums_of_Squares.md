@@ -1,5 +1,7 @@
+```lean
 import Mathlib.Tactic
-/-!
+```
+
 # Sums of squares
 
 We introduce sums of squares and prove some of their basic properties.
@@ -10,29 +12,28 @@ For some results, we specialize to rings or fields.
 
 ## Definition and examples
 
-Sums of squares are defined inductively, on terms of type `List R` where `R` is a semiring (a list is either empty or of the form `a :: L`, where `L`is an already defined list). 
--/
+Sums of squares are defined inductively, on terms of type `List R` where `R` is a semiring (a list is either empty or of the form `a :: L`, where `L`is an already defined list).
 
+```lean
 def sum_of_squares {R : Type} [Semiring R] : List R → R
   | [] => 0
   | (a :: L) => (a ^ 2) + (sum_of_squares L)
+```
 
-/-!
 Note that the definition is computable.
--/
 
+```lean
 #eval sum_of_squares [1, -2, 3] -- 14
 #eval sum_of_squares ([] : List ℕ) -- 0
 
 example : sum_of_squares [1, -2, 3] = 14 := rfl -- the two terms are definitionally equal
-
-/-!
+```
 
 ## Concatenated lists
 
 The sum of squares of the list `L1 ++ L2` is equal to the sum of squares of `L1` plus the sum of squares of `L2`.
--/
 
+```lean
 @[simp]
 theorem sum_of_squares_concat {R : Type} [Semiring R] (L1 L2 : List R) : 
   sum_of_squares (L1 ++ L2) = sum_of_squares L1 + sum_of_squares L2 
@@ -45,13 +46,13 @@ theorem sum_of_squares_concat {R : Type} [Semiring R] (L1 L2 : List R) :
       rw [ih] -- ih : sum_of_squares (L ++ L2) = sum_of_squares L + sum_of_squares L2
       rw [add_assoc] -- the two terms are now equal up to associativity of addition
     done
+```
 
-/-!
 ## Permutations of elements in a list
 
 A sum of squares is invariant under permutations: `L1 ~ L2 → sum_of_squares L1 = sum_of_squares L2`.
--/
 
+```lean
 @[simp]
 theorem sum_of_squares_permut {R : Type} [Semiring R] {L1 L2 : List R} (H : L1 ~ L2) : 
   sum_of_squares L1 = sum_of_squares L2 
@@ -68,13 +69,13 @@ theorem sum_of_squares_permut {R : Type} [Semiring R] {L1 L2 : List R} (H : L1 ~
     · case trans l1 L l2 H1 H2 Sum1 Sum2 => -- case when L1 ~ L and L ~ L2
       rw [Sum1, Sum2] -- by induction sum_of_squares L1 = sum_of_squares L and sum_of_squares L = sum_of_squares L2
     done
+```
 
-/-!
 ## Erasing an element
 
 If a term `a : R` is a member of a list `L : List R`, then we can compute `sum_of_squares L` from `sum_of_squares (List.erase L a) in the following way.
--/
 
+```lean
 @[simp]
 def sum_of_squares_erase {R : Type _} [Semiring R] [DecidableEq R] (L : List R) (a : R) (h : a ∈ L) : 
     sum_of_squares L = a ^ 2 + sum_of_squares (List.erase L a) 
@@ -85,11 +86,11 @@ def sum_of_squares_erase {R : Type _} [Semiring R] [DecidableEq R] (L : List R) 
       done
 
 -- Next multiply or divide terms in the list...
+```
 
-/-!
 ## Mathlib version
--/
 
+```lean
 @[simp]
 theorem sum_of_squares_concat2 {R : Type} [Semiring R] (L1 L2 : List R) : 
   sum_of_squares (L1 ++ L2) = sum_of_squares L1 + sum_of_squares L2 
@@ -117,3 +118,4 @@ def sum_of_squares_erase2 {R : Type _} [Semiring R] [DecidableEq R] (L : List R)
       change sum_of_squares L = sum_of_squares (a :: (List.erase L a))
       rw [sum_of_squares_permut (List.perm_cons_erase h)]
       done
+```
