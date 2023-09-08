@@ -1,9 +1,11 @@
 /- # Formally real semirings -/
-
+import Std.Tactic.ShowTerm
 import Mathlib.NumberTheory.Cyclotomic.Basic
 
 open BigOperators
 
+#check ℤ
+ 
 /- ## Sums of squares
 
 To define formally real semirings, we first define what it means to be a sum of squares in a semiring. -/
@@ -30,9 +32,19 @@ def is_sum_of_squares {R : Type _} [Semiring R] (x : R) : Prop := ∃ L : List R
 
 #eval sum_of_squares ([] : List ℕ)
 
-/- Note that we can prove that `sum_of_squares [1, 2, 3] = 14` just by using `rfl` -/
+/- Note that in some cases we can prove that `sum_of_squares [1, 2, 3] = 14` just by using `rfl` -/
 
-example : sum_of_squares [1, 2, 3] = 14 := rfl
+example : sum_of_squares [1, -2, 3] = 14 := rfl
+
+#eval sum_of_squares ([1, 1/2] : List ℚ)
+
+example : sum_of_squares ([1, 1/2] : List ℚ) = (5 : Rat) / 4 :=
+by
+  -- ring_nf
+  -- norm_cast
+  rw [sum_of_squares, sum_of_squares, sum_of_squares]
+  ring
+
 
 /- If a list is built by concatenation, we can compute its sum of squares from the sums of squares of each constructor. -/
 
@@ -161,9 +173,12 @@ def one_add_sum_of_squares_neq_zero {R : Type _} [Semiring R] [ntR : Nontrivial 
    constructor
    · exact one_add_sum_of_squares_neq_zero
    · exact sum_of_sq_eq_zero_iff_all_zero
-   done 
+   done
 
- /- ## Positive cones -/
+ def formally_real_semifield_equiv_term {F : Type _} [Semifield F] [BEq F] : (IsFormallyReal F) ↔ ¬ (∃ L : List F, 1 + sum_of_squares L = 0) := by
+  exact { mp := one_add_sum_of_squares_neq_zero, mpr := sum_of_sq_eq_zero_iff_all_zero }
+
+/- ## Positive cones -/
 
  -- We define positive cones and show how maximal positive cones induce orderings.
 
@@ -173,3 +188,10 @@ def one_add_sum_of_squares_neq_zero {R : Type _} [Semiring R] [ntR : Nontrivial 
  /- We show that formally real fields admit an ordering, not unique in general.
 
  In particular, **a field `F` is formally real if and only if it admits an ordering.** -/
+
+example : (2 < 3) := 
+-- by
+  -- -- exact lt_one_add 2
+  -- apply lt_add_of_pos_left 2
+  -- exact zero_lt_one
+  lt_add_of_pos_left 2 zero_lt_one
