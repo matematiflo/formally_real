@@ -28,7 +28,7 @@ The sum of squares of the list `L1 ++ L2` is the sum of squares of `L1` plus the
 theorem sum_of_squares_concat {R : Type} [Semiring R] (L1 L2 : List R) : 
   sum_of_squares (L1 ++ L2) = sum_of_squares L1 + sum_of_squares L2 
   := by
-    induction L1 with
+    induction L1 with -- we prove the result by induction on the list L1 (the list type is an inductive type)
     | nil => simp [sum_of_squares] -- [] ++ L2 = L2 so everything follows by definition of sum_of_squares
     | cons a L ih => 
       simp [sum_of_squares] -- sum_of_squares (a :: (L ++ L2)) = a^2 + sum_of_squares (L ++ L2)
@@ -37,7 +37,7 @@ theorem sum_of_squares_concat {R : Type} [Semiring R] (L1 L2 : List R) :
     done
 
 /-!
-A sum of squares is invariant under permutations.
+A sum of squares is invariant under permutations (`L1 ~ L2 → sum_of_squares L1 = sum_of_squares L2` ).
 -/
 
 @[simp] 
@@ -45,7 +45,7 @@ theorem sum_of_squares_permut {R : Type} [Semiring R] (L1 L2 : List R) :
   L1 ~ L2 -> sum_of_squares L1 = sum_of_squares L2 
   := by
     intro H
-    induction H
+    induction H -- we prove the result by induction on ~ (the permutation type is an inductive type)
     · case nil => rfl -- case when L1 L2 are both empty
     · case cons x l1 l2 Hl Sum12 => -- case when L1 = (x :: l1) and L2 = (x :: l2) with l1 ~ l2
       simp [sum_of_squares] -- by definition, sum_of_squares (x :: lj) = x^2 + sum_of_squares lj
@@ -54,5 +54,5 @@ theorem sum_of_squares_permut {R : Type} [Semiring R] (L1 L2 : List R) :
       simp [sum_of_squares] -- by definition, sum_of_squares (y :: (x :: L)) = y^2 + (x^2 + sum_of_squares L)
       rw [← add_assoc, ← add_assoc, add_comm (y^2) (x^2)] -- the two expressions are equal in R
     · case trans l1 L l2 H1 H2 Sum1 Sum2 => -- case when L1 ~ L and L ~ L2
-      rw [Sum1, Sum2]
+      rw [Sum1, Sum2] -- by induction sum_of_squares L1 = sum_of_squares L and sum_of_squares L = sum_of_squares L2
     done
