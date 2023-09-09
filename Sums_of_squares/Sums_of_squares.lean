@@ -182,13 +182,13 @@ theorem sum_of_squares_erase_golfed {R : Type} [Semiring R] [DecidableEq R] (L :
     := by rw [sum_of_squares_permut_golfed (List.perm_cons_erase h), sum_of_squares]
 
 @[simp]
-def sum_of_squares_of_list_mul_golfed {R : Type} [CommSemiring R] 
+theorem sum_of_squares_of_list_mul_golfed {R : Type} [CommSemiring R] 
   (L : List R) (c : R) : sum_of_squares (L.map (c * .)) = c ^ 2 * sum_of_squares L
     := by induction L with
       | nil => simp [sum_of_squares]
       | cons a _ ih => simp [sum_of_squares, ih, mul_add, mul_pow c a 2]
 
 @[simp]
-def sum_of_squares_of_list_div_golfed {F : Type} [Semifield F] 
+theorem sum_of_squares_of_list_div_golfed {F : Type} [Semifield F] 
   (L : List F) (c : F) : sum_of_squares (L.map (. / c)) = (1 / c ^ 2) * sum_of_squares L 
     := by simp [div_eq_mul_inv, mul_comm _ c⁻¹]
