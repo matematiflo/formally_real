@@ -17,6 +17,8 @@ The basic setup is that of a general semiring `R`. For example, we can consider 
 
 For some results, we specialize to rings or fields.
 
+The notation `ih` in proofs by induction is meant to signify *induction hypothesis*.
+
 ## Definition and examples
 
 Sums of squares are defined inductively, on terms of type `List R` where `R` is a semiring (recall that lists are defined inductively themselves: they are either empty or of the form `a :: L`, where `L`is an already defined list). 
@@ -44,9 +46,9 @@ example : sum_of_squares [1, -2, 3] = 14 := rfl -- the two terms are definitiona
 def squaring_and_summing {R : Type} [Semiring R] 
   (L : List R) : (L.map (. ^ 2)).sum = sum_of_squares L
     := by
-      induction L with
-      | nil => rfl
-      | cons a L ih => simp [sum_of_squares, ih]
+      induction L with -- we prove the result by induction on the list L (the list type is an inductive type)
+      | nil => rfl -- case when L is the empty list, the two terms are definitionally equal
+      | cons a l ih => simp [sum_of_squares, ih] -- case when L = (a :: l), the two terms reduce to equal ones after some simplifications
       done
 
 /-!
@@ -61,7 +63,7 @@ The sum of squares of the list `L1 ++ L2` is equal to the sum of squares of `L1`
 def sum_of_squares_concat {R : Type} [Semiring R] 
   (L1 L2 : List R) : sum_of_squares (L1 ++ L2) = sum_of_squares L1 + sum_of_squares L2 
     := by
-      induction L1 with -- we prove the result by induction on the list L1 (the list type is an inductive type)
+      induction L1 with -- we prove the result by induction on the list L1
       | nil => -- case when L1 is the empty list
         simp [sum_of_squares] -- [] ++ L2 = L2 so everything follows by definition of sum_of_squares
       | cons a L ih => -- case when L1 = (a :: L)
@@ -107,32 +109,44 @@ In order to be able to use the function `List.erase`, we assume that the semirin
 def sum_of_squares_erase {R : Type} [Semiring R] [DecidableEq R] 
   (L : List R) (a : R) (h : a ∈ L) : sum_of_squares L = a ^ 2 + sum_of_squares (List.erase L a) 
     := by
-      change sum_of_squares L = sum_of_squares (a :: (List.erase L a))
-      have H : L ~ (a :: (List.erase L a)) := List.perm_cons_erase h
-      rw [sum_of_squares_permut H]
+      change sum_of_squares L = sum_of_squares (a :: (List.erase L a)) -- we can replace the goal with a *definitionally equal* one
+      have H : L ~ (a :: (List.erase L a)) := List.perm_cons_erase h -- this is the Mathlib proof that L ~ (a :: (List.erase L a))
+      rw [sum_of_squares_permut H] -- since we ha ve a proof that L ~ (a :: (List.erase L a)), we can use the sum_of_squares_permut function that we defined earlier to conclude that the two sums of squares are equal
       done
 
 /-!
 ## Multiplicative properties
 
-In order to be able to apply lemmas such as `mul_pow`, we assume that the product the semiring `R` is commutative.
+The first result says that if you multiply every member of a list `L : List R` by a constant `c : R`, then the sum of squares of the new list is equal to `c ^ 2 * sum_of_squares L`. 
+
+In order to be able to apply lemmas such as `mul_pow` in the proof, we assume here that the product the semiring `R` is commutative.
+
+We take a look at a few examples first.
 -/
 
+#eval sum_of_squares [2 * 1, 2 * ( -2), 2 * 3] -- 56 
+#eval 4 * sum_of_squares [1, -2, 3] -- 56
+
+example : sum_of_squares [2 * 1, 2 * ( -2), 2 * 3] = 4 * sum_of_squares [1, -2, 3] := rfl
+
+example (a x y : ℚ) : sum_of_squares [a * x, a * y] = a ^ 2 * sum_of_squares [x, y] 
+  := by simp [sum_of_squares, mul_pow, mul_add]
+    
 @[simp]
 def sum_of_squares_of_list_mul {R : Type} [CommSemiring R] 
   (L : List R) (c : R) : sum_of_squares (L.map (c * .)) = c ^ 2 * sum_of_squares L 
     := by
-      induction L with
-      | nil => simp [sum_of_squares]
-      | cons a _ ih => simp [sum_of_squares, ih, mul_add, mul_pow c a 2]
+      induction L with -- again an induction on L
+      | nil => simp [sum_of_squares] -- the case of the empty list is trivial
+      | cons a _ ih => simp [sum_of_squares, ih, mul_add, mul_pow c a 2] -- the case of a list of the form (a :: l) follows from simplifications and the use of the induction hypothesis
       done
 
 @[simp]
 def sum_of_squares_of_list_div {F : Type} [Semifield F] 
   (L : List F) (c : F) : sum_of_squares (L.map (. / c)) = (1 / c ^ 2) * sum_of_squares L 
-    := by
+    := by -- this will be an application of sum_of_squares_of_list_mul, using the fact that . / c = . * c⁻¹
       have aux : (fun x => x / c) = (fun x => c⁻¹ * x) 
-        := by field_simp 
+        := by field_simp
       simp [aux] -- Note that `sum_of_squares_of_list_mul` has been added to `simp`, so we do not need to include it here
       done
 
