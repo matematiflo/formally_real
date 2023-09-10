@@ -21,7 +21,7 @@ The notation `ih` in proofs by induction is meant to signify *induction hypothes
 
 ## Definition and examples
 
-Sums of squares are defined inductively, on terms of type `List R` where `R` is a semiring (recall that lists are defined inductively themselves: they are either empty or of the form `a :: L`, where `L`is an already defined list). 
+Sums of squares are defined inductively, on terms of type `List R` where `R` is a semiring (recall that lists are defined inductively themselves: a list `L` is either empty or of the form `a :: l`, where `l`is an already defined list). 
 -/
 
 def sum_of_squares {R : Type} [Semiring R] : List R → R

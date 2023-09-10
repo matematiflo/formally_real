@@ -20,7 +20,7 @@ The notation `ih` in proofs by induction is meant to signify *induction hypothes
 
 ## Definition and examples
 
-Sums of squares are defined inductively, on terms of type `List R` where `R` is a semiring (recall that lists are defined inductively themselves: they are either empty or of the form `a :: L`, where `L`is an already defined list).
+Sums of squares are defined inductively, on terms of type `List R` where `R` is a semiring (recall that lists are defined inductively themselves: a list `L` is either empty or of the form `a :: l`, where `l`is an already defined list).
 
 ```lean
 def sum_of_squares {R : Type} [Semiring R] : List R → R
@@ -150,6 +150,174 @@ def sum_of_squares_of_list_div {F : Type} [Semifield F]
       done
 ```
 
+## Golfed versions
+
+```lean
+def squaring_and_summing_golfed {R : Type} [Semiring R] 
+  (L : List R) : (L.map (. ^ 2)).sum = sum_of_squares L
+    := by induction L with
+      | nil => rfl
+      | cons a L ih => simp [sum_of_squares, ih]
+
+@[simp]
+theorem sum_of_squares_concat_golfed {R : Type} [Semiring R] 
+  (L1 L2 : List R) : sum_of_squares (L1 ++ L2) = sum_of_squares L1 + sum_of_squares L2 
+    := by induction L1 with
+      | nil => simp [sum_of_squares]
+      | cons _ _ ih => simp [sum_of_squares, ih, add_assoc]
+
+@[simp]
+theorem sum_of_squares_permut_golfed {R : Type} [Semiring R] {L1 L2 : List R} 
+  (H : L1 ~ L2) : sum_of_squares L1 = sum_of_squares L2 
+    := by induction H with
+      | nil => rfl
+      | cons _ _ Sum12 => simp [sum_of_squares, Sum12]
+      | swap x y _ => simp [sum_of_squares, ← add_assoc, ← add_assoc, add_comm (y  ^ 2) (x ^ 2)]
+      | trans _ _ Sum1 Sum2 => rw [Sum1, Sum2]
+## Golfed versions
+
+```lean
+def squaring_and_summing_golfed {R : Type} [Semiring R] 
+  (L : List R) : (L.map (. ^ 2)).sum = sum_of_squares L
+    := by induction L with
+      | nil => rfl
+      | cons a L ih => simp [sum_of_squares, ih]
+
+@[simp]
+theorem sum_of_squares_concat_golfed {R : Type} [Semiring R] 
+  (L1 L2 : List R) : sum_of_squares (L1 ++ L2) = sum_of_squares L1 + sum_of_squares L2 
+    := by induction L1 with
+      | nil => simp [sum_of_squares]
+      | cons _ _ ih => simp [sum_of_squares, ih, add_assoc]
+
+@[simp]
+theorem sum_of_squares_permut_golfed {R : Type} [Semiring R] {L1 L2 : List R} 
+  (H : L1 ~ L2) : sum_of_squares L1 = sum_of_squares L2 
+    := by induction H with
+      | nil => rfl
+      | cons _ _ Sum12 => simp [sum_of_squares, Sum12]
+      | swap x y _ => simp [sum_of_squares, ← add_assoc, ← add_assoc, add_comm (y  ^ 2) (x ^ 2)]
+      | trans _ _ Sum1 Sum2 => rw [Sum1, Sum2]
+## Golfed versions
+
+```lean
+def squaring_and_summing_golfed {R : Type} [Semiring R] 
+  (L : List R) : (L.map (. ^ 2)).sum = sum_of_squares L
+    := by induction L with
+      | nil => rfl
+      | cons a L ih => simp [sum_of_squares, ih]
+
+@[simp]
+theorem sum_of_squares_concat_golfed {R : Type} [Semiring R] 
+  (L1 L2 : List R) : sum_of_squares (L1 ++ L2) = sum_of_squares L1 + sum_of_squares L2 
+    := by induction L1 with
+      | nil => simp [sum_of_squares]
+      | cons _ _ ih => simp [sum_of_squares, ih, add_assoc]
+
+@[simp]
+theorem sum_of_squares_permut_golfed {R : Type} [Semiring R] {L1 L2 : List R} 
+  (H : L1 ~ L2) : sum_of_squares L1 = sum_of_squares L2 
+    := by induction H with
+      | nil => rfl
+      | cons _ _ Sum12 => simp [sum_of_squares, Sum12]
+      | swap x y _ => simp [sum_of_squares, ← add_assoc, ← add_assoc, add_comm (y  ^ 2) (x ^ 2)]
+      | trans _ _ Sum1 Sum2 => rw [Sum1, Sum2]
+## Golfed versions
+
+```lean
+def squaring_and_summing_golfed {R : Type} [Semiring R] 
+  (L : List R) : (L.map (. ^ 2)).sum = sum_of_squares L
+    := by induction L with
+      | nil => rfl
+      | cons a L ih => simp [sum_of_squares, ih]
+
+@[simp]
+theorem sum_of_squares_concat_golfed {R : Type} [Semiring R] 
+  (L1 L2 : List R) : sum_of_squares (L1 ++ L2) = sum_of_squares L1 + sum_of_squares L2 
+    := by induction L1 with
+      | nil => simp [sum_of_squares]
+      | cons _ _ ih => simp [sum_of_squares, ih, add_assoc]
+
+@[simp]
+theorem sum_of_squares_permut_golfed {R : Type} [Semiring R] {L1 L2 : List R} 
+  (H : L1 ~ L2) : sum_of_squares L1 = sum_of_squares L2 
+    := by induction H with
+      | nil => rfl
+      | cons _ _ Sum12 => simp [sum_of_squares, Sum12]
+      | swap x y _ => simp [sum_of_squares, ← add_assoc, ← add_assoc, add_comm (y  ^ 2) (x ^ 2)]
+      | trans _ _ Sum1 Sum2 => rw [Sum1, Sum2]
+## Golfed versions
+
+```lean
+def squaring_and_summing_golfed {R : Type} [Semiring R] 
+  (L : List R) : (L.map (. ^ 2)).sum = sum_of_squares L
+    := by induction L with
+      | nil => rfl
+      | cons a L ih => simp [sum_of_squares, ih]
+
+@[simp]
+theorem sum_of_squares_concat_golfed {R : Type} [Semiring R] 
+  (L1 L2 : List R) : sum_of_squares (L1 ++ L2) = sum_of_squares L1 + sum_of_squares L2 
+    := by induction L1 with
+      | nil => simp [sum_of_squares]
+      | cons _ _ ih => simp [sum_of_squares, ih, add_assoc]
+
+@[simp]
+theorem sum_of_squares_permut_golfed {R : Type} [Semiring R] {L1 L2 : List R} 
+  (H : L1 ~ L2) : sum_of_squares L1 = sum_of_squares L2 
+    := by induction H with
+      | nil => rfl
+      | cons _ _ Sum12 => simp [sum_of_squares, Sum12]
+      | swap x y _ => simp [sum_of_squares, ← add_assoc, ← add_assoc, add_comm (y  ^ 2) (x ^ 2)]
+      | trans _ _ Sum1 Sum2 => rw [Sum1, Sum2]
+## Golfed versions
+
+```lean
+def squaring_and_summing_golfed {R : Type} [Semiring R] 
+  (L : List R) : (L.map (. ^ 2)).sum = sum_of_squares L
+    := by induction L with
+      | nil => rfl
+      | cons a L ih => simp [sum_of_squares, ih]
+
+@[simp]
+theorem sum_of_squares_concat_golfed {R : Type} [Semiring R] 
+  (L1 L2 : List R) : sum_of_squares (L1 ++ L2) = sum_of_squares L1 + sum_of_squares L2 
+    := by induction L1 with
+      | nil => simp [sum_of_squares]
+      | cons _ _ ih => simp [sum_of_squares, ih, add_assoc]
+
+@[simp]
+theorem sum_of_squares_permut_golfed {R : Type} [Semiring R] {L1 L2 : List R} 
+  (H : L1 ~ L2) : sum_of_squares L1 = sum_of_squares L2 
+    := by induction H with
+      | nil => rfl
+      | cons _ _ Sum12 => simp [sum_of_squares, Sum12]
+      | swap x y _ => simp [sum_of_squares, ← add_assoc, ← add_assoc, add_comm (y  ^ 2) (x ^ 2)]
+      | trans _ _ Sum1 Sum2 => rw [Sum1, Sum2]
+## Golfed versions
+
+```lean
+def squaring_and_summing_golfed {R : Type} [Semiring R] 
+  (L : List R) : (L.map (. ^ 2)).sum = sum_of_squares L
+    := by induction L with
+      | nil => rfl
+      | cons a L ih => simp [sum_of_squares, ih]
+
+@[simp]
+theorem sum_of_squares_concat_golfed {R : Type} [Semiring R] 
+  (L1 L2 : List R) : sum_of_squares (L1 ++ L2) = sum_of_squares L1 + sum_of_squares L2 
+    := by induction L1 with
+      | nil => simp [sum_of_squares]
+      | cons _ _ ih => simp [sum_of_squares, ih, add_assoc]
+
+@[simp]
+theorem sum_of_squares_permut_golfed {R : Type} [Semiring R] {L1 L2 : List R} 
+  (H : L1 ~ L2) : sum_of_squares L1 = sum_of_squares L2 
+    := by induction H with
+      | nil => rfl
+      | cons _ _ Sum12 => simp [sum_of_squares, Sum12]
+      | swap x y _ => simp [sum_of_squares, ← add_assoc, ← add_assoc, add_comm (y  ^ 2) (x ^ 2)]
+      | trans _ _ Sum1 Sum2 => rw [Sum1, Sum2]
 ## Golfed versions
 
 ```lean
